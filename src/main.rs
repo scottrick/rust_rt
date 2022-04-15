@@ -1,11 +1,26 @@
-use rust_rt::{Sphere, Vec3};
+use gtk::prelude::*;
+use gtk::{Application, ApplicationWindow};
 
 fn main() {
-    println!("Hello, rust_rt!");
+    // Create a new application
+    let app = Application::builder()
+        .application_id("org.gtk-rs.example")
+        .build();
 
-    let center_point = Vec3::new(49., 49., 52.);
-    let sphere = Sphere::new(center_point, 7.0);
+    // Connect to "activate" signal of `app`
+    app.connect_activate(build_ui);
 
-    println!("point: {:?}", sphere.center);
-    println!("sphere: {:?}", sphere);
+    // Run the application
+    app.run();
+}
+
+fn build_ui(app: &Application) {
+    // Create a window and set the title
+    let window = ApplicationWindow::builder()
+        .application(app)
+        .title("My GTK App")
+        .build();
+
+    // Present window
+    window.present();
 }
