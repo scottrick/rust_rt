@@ -22,3 +22,62 @@ impl Sphere {
         Self { center, radius }
     }
 }
+
+#[derive(Debug)]
+pub struct Screen {
+    pub width: u16,
+    pub height: u16,
+    pub pixel_data: Vec<u8>,
+}
+
+impl Screen {
+    pub fn new(width: u16, height: u16) -> Self {
+        Self {
+            width,
+            height,
+            pixel_data: vec![0u8; width as usize * height as usize * 3],
+        }
+    }
+}
+
+#[derive(Debug)]
+pub struct Camera {
+    pub pos: Vec3,
+    pub look_dir: Vec3,
+    pub up_dir: Vec3,
+}
+
+impl Camera {
+    pub fn new(pos: Vec3, look_dir: Vec3, up_dir: Vec3) -> Self {
+        Self {
+            pos,
+            look_dir,
+            up_dir,
+        }
+    }
+}
+
+#[derive(Debug)]
+pub struct Ray {
+    pub origin: Vec3,
+    pub dir: Vec3,
+}
+
+impl Ray {
+    pub fn new(origin: Vec3, dir: Vec3) -> Self {
+        Self { origin, dir }
+    }
+}
+
+#[derive(Debug)]
+pub struct Color {
+    pub r: u8,
+    pub g: u8,
+    pub b: u8,
+}
+
+impl Color {
+    pub fn new(r: u8, g: u8, b: u8) -> Self {
+        Self { r, g, b }
+    }
+}

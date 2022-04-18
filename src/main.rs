@@ -1,6 +1,6 @@
 use std::{fs::File, io::BufWriter, path::Path};
 
-use rust_rt::{Sphere, Vec3};
+use rust_rt::{Screen, Sphere, Vec3};
 
 fn main() {
     println!("Hello, rust_rt!");
@@ -15,8 +15,7 @@ fn main() {
 }
 
 fn test_png() {
-    const WIDTH: usize = 640;
-    const HEIGHT: usize = 640;
+    let mut screen = Screen::new(800, 600);
 
     let path = Path::new(r"image.png");
     let file = File::create(path).unwrap();
@@ -24,8 +23,8 @@ fn test_png() {
 
     let mut encoder = png::Encoder::new(
         buff_writer,
-        WIDTH.try_into().unwrap(),
-        HEIGHT.try_into().unwrap(),
+        screen.width.try_into().unwrap(),
+        screen.height.try_into().unwrap(),
     );
 
     encoder.set_color(png::ColorType::Rgb);
@@ -33,19 +32,17 @@ fn test_png() {
 
     let mut writer = encoder.write_header().unwrap();
 
-    let mut pixel_data = [0u8; WIDTH * HEIGHT * 3];
-
     // populate the pixel data array
-    for y in 0..HEIGHT {
-        for x in 0..WIDTH {
-            let offset_start = (x + y * WIDTH) * 3;
-            let x_percent = x as f32 / WIDTH as f32;
-            let y_percent = y as f32 / HEIGHT as f32;
-            pixel_data[offset_start + 0] = (x_percent * (255 as f32)) as u8; //R
-            pixel_data[offset_start + 1] = 0; //G
-            pixel_data[offset_start + 2] = (y_percent * (255 as f32)) as u8; //B
+    for y in 0..screen.height {
+        for x in 0..screen.width {
+            let offset_start = (x as usize + y as usize * screen.width as usize) * 3;
+            let x_percent = x as f32 / screen.width as f32;
+            let y_percent = y as f32 / screen.height as f32;
+            screen.pixel_data[offset_start + 0] = (x_percent * (255 as f32)) as u8;
+            screen.pixel_data[offset_start + 1] = 0;
+            screen.pixel_data[offset_start + 2] = (y_percent * (255 as f32)) as u8;
         }
     }
 
-    writer.write_image_data(&pixel_data).unwrap(); // Save
+    writer.write_image_data(&screen.pixel_data).unwrap();
 }
