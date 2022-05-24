@@ -24,6 +24,23 @@ impl Sphere {
 }
 
 #[derive(Debug)]
+pub struct Scene {
+    pub spheres: Vec<Sphere>,
+}
+
+impl Scene {
+    pub fn new() -> Self {
+        Self {
+            spheres: Vec::new(),
+        }
+    }
+
+    pub fn add_sphere(&mut self, sphere: Sphere) {
+        self.spheres.push(sphere);
+    }
+}
+
+#[derive(Debug)]
 pub struct Screen {
     pub width: u16,
     pub height: u16,
